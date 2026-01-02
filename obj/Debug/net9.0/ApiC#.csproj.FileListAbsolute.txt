@@ -35,3 +35,4 @@ C:\Users\Ander\Desktop\React\ApiC#\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.Ver
 C:\Users\Ander\Desktop\React\ApiC#\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Ander\Desktop\React\ApiC#\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Ander\Desktop\React\ApiC#\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\Ander\Desktop\React\ApiC#\obj\Debug\net9.0\ApiC#.sourcelink.json

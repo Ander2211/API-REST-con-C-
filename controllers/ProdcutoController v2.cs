@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using model;
+using System;
+using System.Linq;
 
 namespace Controllers.V2;
 
@@ -16,9 +18,41 @@ public class ProductoController : ControllerBase
     };
 
 
-    //GET api/producto
+    //GET api/producto?nombre=&minPrecio=&maxPrecio=&pageNumber=1&pageSize=10
     [HttpGet]
-    public IActionResult Get() => Ok(productos);
+    public IActionResult Get([FromQuery] string? nombre = null,
+                             [FromQuery] decimal? minPrecio = null,
+                             [FromQuery] decimal? maxPrecio = null,
+                             [FromQuery] int pageNumber = 1,
+                             [FromQuery] int pageSize = 10)
+    {
+        if (pageNumber < 1) pageNumber = 1;
+        if (pageSize < 1) pageSize = 10;
+
+        var query = productos.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(nombre))
+            query = query.Where(p => p.Nombre != null && p.Nombre.Contains(nombre, StringComparison.OrdinalIgnoreCase));
+
+        if (minPrecio.HasValue)
+            query = query.Where(p => p.Precio >= minPrecio.Value);
+        if (maxPrecio.HasValue)
+            query = query.Where(p => p.Precio <= maxPrecio.Value);
+
+        var total = query.Count();
+        var items = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+        var result = new PagedResult<Producto>
+        {
+            Items = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = total,
+            TotalPages = (int)Math.Ceiling(total / (double)pageSize)
+        };
+
+        return Ok(result);
+    }
 
     //GET api/producto/1
     [HttpGet("{id}")]
